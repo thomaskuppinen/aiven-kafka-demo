@@ -8,7 +8,7 @@ import os
 import uuid
 import argparse
 
-load_dotenv()
+
 
 def sendEvents(topic, num_events):
 
@@ -36,17 +36,16 @@ def sendEvents(topic, num_events):
     producer.flush()
     return
 
-
-
 def main():
+    load_dotenv()
     parser = argparse.ArgumentParser(prog="createViews.py")
     parser.add_argument("-t", "--topic", help="Name of Kafka Topic", type=str)
     parser.add_argument("-v", "--views", help="Total Number of Views to send to Kafka Topic, default is 10", type=int, default=10, choices=range(1,100), metavar="[1-100]")
     args = parser.parse_args()
-    #exit()
+
     sendEvents(args.topic, args.views)
     exit()
-    
+
 if __name__ == "__main__":
     main()
 

@@ -11,7 +11,7 @@ import argparse
 
 
 def sendEvents(topic, num_events):
-
+    #create producer object, using sensitive values stored in .env file
     producer = KafkaProducer(
         bootstrap_servers=os.environ.get("KAFKA_BOOTSTRAP_URL"),
         security_protocol="SSL",
@@ -20,7 +20,7 @@ def sendEvents(topic, num_events):
         ssl_keyfile=os.environ.get("KAFKA_KEYFILE_LOC"),
         value_serializer=lambda v: json.dumps(v).encode('ascii')
         )
-
+    # simple loop to create variable number of messages for kakfa queue representing a video player sending beacons every 1 second
     i =1
     while i <= num_events:
         sleep(1 - time() % 1)
@@ -32,10 +32,10 @@ def sendEvents(topic, num_events):
             key=str(json.dumps(keyData)).encode('utf-8'),
             value=view
         )
-        
+    # send messages to topic
     producer.flush()
     return
-
+# main function with some very basic parameter validation
 def main():
     load_dotenv()
     parser = argparse.ArgumentParser(prog="createViews.py")
